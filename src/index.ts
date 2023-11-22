@@ -10,6 +10,7 @@ import Image from "./handlers/image";
 import login from "./handlers/login";
 import Message from "./handlers/message";
 import User from "./handlers/users";
+import Servicem from "./handlers/servicem";
 import path from "path";
 import { v2 as cloudinary } from 'cloudinary';
 import { user } from "../models";
@@ -71,6 +72,7 @@ app.use(
             { url: "/services", method: "GET" },
             { url: "/gallery", method: "GET" },
             { url: "/api/messages", method: "POST" },
+            { url: "/api/servicesm", method: "GET" },
         ]
     })
 )
@@ -116,7 +118,16 @@ app.put("/api/users/:id", User.update);
 
 app.delete("/api/users/:id", User.destroy);
 
-app.post("/api/messages", Message.send)
+app.post("/api/messages", Message.send);
+
+app.post("/api/servicesm", Servicem.store)
+
+app.get("/api/servicesm", Servicem.index)
+
+app.put("/api/servicesm/:id", Servicem.update)
+
+app.delete("/api/servicesm/:id", Servicem.destroy)
+
 
 app.get("/*", (_, res) => {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
