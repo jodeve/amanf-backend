@@ -10,7 +10,7 @@ module.exports = {
     await queryInterface.bulkInsert('users', [{
       email: process.env.ADMIN_EMAIL,
       password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 10),
-      role: "Admin",
+      role: "Super Admin",
       createdAt: new Date(),
       updatedAt: new Date(),
     }], {});
