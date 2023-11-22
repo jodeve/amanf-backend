@@ -1,4 +1,4 @@
-import express, { Response } from "express";
+import express, { Response, Request } from "express";
 import { configDotenv } from "dotenv";
 import cors from "cors";
 import mime from "mime";
@@ -9,8 +9,10 @@ import Service from "./handlers/service";
 import Image from "./handlers/image";
 import login from "./handlers/login";
 import Message from "./handlers/message";
+import User from "./handlers/users";
 import path from "path";
 import { v2 as cloudinary } from 'cloudinary';
+import { user } from "../models";
 
 configDotenv();
 
@@ -100,9 +102,19 @@ app.delete("/api/images/:id", Image.destroy)
 
 app.post("/api/login", login)
 
-app.get("/api/user", (_, res: Response) => {
-    res.send({});
+app.get("/api/user", async (req: Request, res: Response) => {
+    //@ts-ignore
+    let _user = await user.findByPk(req.auth.id)
+    res.send(_user);
 })
+
+app.get("/api/users", User.index);
+
+app.post("/api/users", User.store);
+
+app.put("/api/users/:id", User.update);
+
+app.delete("/api/users/:id", User.destroy);
 
 app.post("/api/messages", Message.send)
 

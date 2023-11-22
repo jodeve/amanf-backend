@@ -15,10 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   user.init({
     email: DataTypes.STRING,
-    password: DataTypes.STRING
+    name: DataTypes.STRING,
+    password: DataTypes.STRING,
+    role: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'user',
+    defaultScope: {
+      attributes: { exclude: ['password'] }
+    }
   });
   return user;
 };
