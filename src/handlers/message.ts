@@ -1,8 +1,9 @@
 import nodeMailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import excerptHtml from "excerpt-html";
 
 async function send(req, res) {
-    const {
+    let {
         email,
         message,
         name,
@@ -28,18 +29,25 @@ async function send(req, res) {
 
     const transporter = nodeMailer.createTransport(transportOptions);
 
+    const excerpt = excerptHtml(message, {
+        pruneLength: 20,
+    });
+
+    const _message = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
+    const substring = excerpt;
+
     try {
         await transporter.sendMail({
             from: process.env.GMAIL_USER,
             to: process.env.GMAIL_USER,
-            subject: `Message From Website`,
-            html: `You got a message from 
-            Email : ${email}
-            Name: ${name}
-            Message: ${message}`,
+            subject: `Website (${name}): ${substring}`,
+            html: `<p>${_message}</p>`,
+            cc: [email]
         });
         return res.send({});
-    } catch (error) {
+    } catch (e) {
+        console.log(e);
         return res
             .status(500)
             .send({});
