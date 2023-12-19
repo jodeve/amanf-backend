@@ -23,7 +23,9 @@ async function send(req, res) {
             auth: {
                 user: process.env.GMAIL_USER,
                 pass: process.env.PASSWORD,
-            }
+            },
+            port: 465,
+            secure: true,
         }
     }
 
